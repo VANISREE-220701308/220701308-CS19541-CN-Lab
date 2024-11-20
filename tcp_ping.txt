@@ -1,0 +1,31 @@
+client.py
+
+
+from socket import *
+HOST = "172.16.9.214"
+PORT = 65432
+with socket(AF_INET,SOCK_STREAM) as s:
+    s.connect((HOST,PORT))
+    s.sendall(b"hello, world")
+    data = s.recv(1024)
+print(f"Received {data!r}")
+
+
+
+server.py
+
+from socket import *
+HOST = "172.16.10.226"
+PORT = 65432
+with socket(AF_INET,SOCK_STREAM) as s:
+    s.bind((HOST,PORT))
+    s.listen()
+    conn,addr=s.accept()
+    with conn:
+        print(f"Connected by {addr}")
+        while True:
+            data = conn.recv(1024)
+            if not data:
+                break
+            conn.sendall(data)
+            
